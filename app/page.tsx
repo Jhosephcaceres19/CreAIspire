@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="bg-gradient-to-b from-black via-violet-800 to-violet-600 min-h-screen">
       <Navbar />
-      <main className="flex flex-col lg:flex-row-reverse place-items-center px-8 h-full gap-4 pt-20 md:pt-40 lg:pt-50 ">
+      <main className="flex flex-col lg:flex-row-reverse place-items-center px-8 h-full gap-4 pt-20 md:pt-40 lg:pt-50 lg:pr-0">
         <Image
           src="/agencia.png"
           width={400}

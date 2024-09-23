@@ -1,16 +1,28 @@
 import React from "react";
 import Navbar from "../Navbar";
 import Sidebar from "./Sidebar";
+import Text from "./Text";
+import Desing from "./Desing";
 
 export default function Dashboard() {
   return (
-    <div className="bg-gradient-to-b from-black via-violet-800 to-violet-600 min-h-screen">
+    <div className="bg-gradient-to-b from-black via-violet-800 to-violet-600 min-h-screen w-full">
       <Navbar />
-      <div className="pt-20 flex flex-row-reverse p-10 gap-4">
-        <Sidebar />
-        <div className="flex  gap-2">
-          <div className="w-[700px]  bg-white rounded-xl">texto</div>
-          <div className="w-[700px] bg-white rounded-lg">disenio</div>
+      <div className="flex justify-center w-full">
+        <div className="flex flex-row-reverse gap-1 mt-32 md:mt-40 max-w-screen-lg w-full px-2">
+          <Sidebar />
+          <div className="flex flex-col gap-2 w-full">
+            <div className="bg-white rounded-xl p-4">
+              <div className=" flex justify-center ">
+              <Text />
+              </div>
+            </div>
+            <div className="bg-white rounded-lg p-4 h-[300px]">
+              <div className="flex h-full justify-center">
+              <Desing/>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

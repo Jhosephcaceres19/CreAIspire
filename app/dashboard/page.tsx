@@ -18,7 +18,7 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="bg-white rounded-lg p-4 h-[300px]">
-              <div className="flex h-full justify-center">
+              <div className="flex h-full">
               <Desing/>
               </div>
             </div>

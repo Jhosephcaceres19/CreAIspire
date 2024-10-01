@@ -20,7 +20,6 @@ export default function FormEventAnnoun() {
   };
 
   const handleSubmit = (values) => {
-    // Crear un objeto JSON con los valores del formulario
     const postData = {
       eventName: values.eventName,
       eventDate: values.eventDate,
@@ -32,7 +31,7 @@ export default function FormEventAnnoun() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center mt-10">
       <Formik
         initialValues={{
           eventName: "",
@@ -45,11 +44,21 @@ export default function FormEventAnnoun() {
         validationSchema={getValidationSchema()}
         onSubmit={handleSubmit}
       >
-        <Form>
-          <h2 className="text-xl font-semibold text-center text-violet-600">Generador de anuncio para evento</h2>
-          <div>
-            <label htmlFor="eventName" className="block text-gray-700">Nombre del evento</label>
-            <Field id="eventName" name="eventName" type="text" className="mt-1 block w-full border border-gray-300 rounded-md p-2"/>
+        <Form className="form-fields-container p-4 bg-sky-500 rounded-lg ">
+          <h2 className="text-xl font-semibold text-center text-violet-700">
+            Generador de anuncio para evento
+          </h2>
+
+          <div className="form-field">
+            <label htmlFor="eventName" className="block text-slate-900">
+              Nombre del evento
+            </label>
+            <Field
+              id="eventName"
+              name="eventName"
+              type="text"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            />
             <ErrorMessage
               name="eventName"
               component="div"
@@ -57,9 +66,16 @@ export default function FormEventAnnoun() {
             />
           </div>
 
-          <div>
-            <label htmlFor="eventDate" className="block text-gray-700">Fecha del evento</label>
-            <Field id="eventDate" name="eventDate" type="date" className="mt-1 block w-full border border-gray-300 rounded-md p-2"/>
+          <div className="form-field">
+            <label htmlFor="eventDate" className="block text-slate-900">
+              Fecha del evento
+            </label>
+            <Field
+              id="eventDate"
+              name="eventDate"
+              type="date"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            />
             <ErrorMessage
               name="eventDate"
               component="div"
@@ -67,9 +83,16 @@ export default function FormEventAnnoun() {
             />
           </div>
 
-          <div>
-            <label htmlFor="location" className="block text-gray-700">Ubicación</label>
-            <Field id="location" name="location" type="text" className="mt-1 block w-full border border-gray-300 rounded-md p-2"/>
+          <div className="form-field">
+            <label htmlFor="location" className="block text-slate-900">
+              Ubicación
+            </label>
+            <Field
+              id="location"
+              name="location"
+              type="text"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            />
             <ErrorMessage
               name="location"
               component="div"
@@ -77,9 +100,16 @@ export default function FormEventAnnoun() {
             />
           </div>
 
-          <div>
-            <label htmlFor="eventType" className="block text-gray-700">Tipo de evento</label>
-            <Field as="select" id="eventType" name="eventType" className="mt-1 block w-full border border-gray-300 rounded-md p-2">
+          <div className="form-field">
+            <label htmlFor="eventType" className="block text-slate-900">
+              Tipo de evento
+            </label>
+            <Field
+              as="select"
+              id="eventType"
+              name="eventType"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            >
               <option value="conferencia">Conferencia</option>
               <option value="taller">Taller</option>
               <option value="seminario">Seminario</option>
@@ -93,9 +123,16 @@ export default function FormEventAnnoun() {
             />
           </div>
 
-          <div>
-            <label htmlFor="description" className="block text-gray-700">Descripción del evento</label>
-            <Field as="textarea" id="description" name="description" className="mt-1 block w-full border border-gray-300 rounded-md p-2"/>
+          <div className="form-field">
+            <label htmlFor="description" className="block text-slate-900">
+              Descripción del evento
+            </label>
+            <Field
+              as="textarea"
+              id="description"
+              name="description"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            />
             <ErrorMessage
               name="description"
               component="div"
@@ -103,7 +140,12 @@ export default function FormEventAnnoun() {
             />
           </div>
 
-          <button type="submit" className="w-full py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition duration-200">Publicar Anuncio del Evento</button>
+          <button
+            type="submit"
+            className="w-full py-2 mt-4 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition duration-200"
+          >
+            Publicar Anuncio del Evento
+          </button>
         </Form>
       </Formik>
     </div>

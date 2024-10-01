@@ -1,86 +1,67 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 
 export default function Sidebar() {
+  const [open, setOpen] = useState(false)
   return (
-    <div className="text-white shadow-xl shadow-sky-800 flex flex-col gap-3 p-2 justify-start rounded-lg bg-sky-950 w-auto divide-y divide-sky-400">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row-reverse ">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
+    <div className="text-white  flex flex-col p-2 items-center rounded-lg bg-sky-950 w-auto divide-y divide-sky-400">
+      <div className="flex flex-col gap-4 ">
+        <div className={`${!open ? "w-full" : "w-[200px]"} flex flex-col gap-4 lg:w-[200px]`}>
+          <div className="bg-violet-700 rounded-lg p-2 w-[25px] lg:w-[200px] justify-center text-white flex gap-2">
+            <p className="hidden lg:flex">Generar Post</p>
+            <button
+              onClick={() => setOpen(true)}
+              className={`${!open ? "flex" : "hidden"}`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={() => setOpen(false)}
+              className={`${!open ? "hidden" : "flex"}`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m4.5 15.75 7.5-7.5 7.5 7.5"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            className={`${
+              !open ? "hidden" : "w-[200px]"
+            } bg-violet-600 rounded-md p-2 flex justify-between text-white`}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-            />
-          </svg>
-          <input
-            type="text"
-            placeholder="Buscar"
-            className="rounded-md p-1 w-40 border-black hidden"
-          />
-        </div>
-        <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
-            />
-          </svg>
-        </div>
-        <div className="flex gap-2 flex-row-reverse">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m19.5 8.25-7.5 7.5-7.5-7.5"
-            />
-          </svg>
-        </div>
-        <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-            
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-            />
-          </svg>
+            <span className="flex flex-col gap-3 items-start">
+              <button className="hover:underline">Mensaje de amor</button>
+              <button className="hover:underline">Promocion de producto</button>
+              <button className="hover:underline">Post inspiracional</button>
+              <button className="hover:underline">Anuncio de evento</button>
+            </span>
+          </div>
         </div>
       </div>
-      <div className="flex justify-end">#</div>
     </div>
   );
 }

@@ -31,7 +31,7 @@ export default function FormEventAnnoun() {
   };
 
   return (
-    <div className="flex justify-center items-center mt-10">
+    <div className="flex justify-center items-center ">
       <Formik
         initialValues={{
           eventName: "",

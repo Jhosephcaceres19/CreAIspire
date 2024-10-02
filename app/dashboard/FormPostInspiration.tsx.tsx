@@ -34,7 +34,7 @@ export default function FormPostInspiration() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center">
       <Formik
         initialValues={{
           title: "",
@@ -45,7 +45,7 @@ export default function FormPostInspiration() {
         validationSchema={getValidationSchema()}
         onSubmit={handleSubmit}
       >
-        <Form>
+        <Form className="form-fields-container p-4 bg-sky-500 rounded-lg ">
           <h2 className="text-xl font-semibold text-center text-violet-600">Generador de post de inspiracion</h2>
           <div>
             <label htmlFor="title" className="block text-gray-700">Título del post</label>
@@ -99,7 +99,7 @@ export default function FormPostInspiration() {
             />
           </div>
 
-          <button type="submit" className="w-full py-2 bg-violet-600 text-white rounded-e-md hover:bg-violet-700 transition duration-200">Publicar Post Inspiracional</button>
+          <button type="submit" className="w-full py-2 mt-5 bg-violet-600 text-white rounded-e-md hover:bg-violet-700 transition duration-200">Publicar Post Inspiracional</button>
         </Form>
       </Formik>
     </div>

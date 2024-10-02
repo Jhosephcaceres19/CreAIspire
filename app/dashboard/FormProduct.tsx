@@ -40,7 +40,7 @@ export default function FormProduct() {
   };
 
   return (
-    <div>
+    <div className="flex justify-center items-center">
       <Formik
         initialValues={{
           productName: "",
@@ -53,7 +53,7 @@ export default function FormProduct() {
         validationSchema={getValidationSchema()}
         onSubmit={handleSubmit}
       >
-        <Form>
+        <Form className="form-fields-container p-4 bg-sky-500 rounded-lg">
           <h2 className="text-xl font-semibold text-center text-violet-600">Generador para post de productos</h2>
           <div>
             <label htmlFor="productName" className="block text-gray-700">Nombre del producto</label>
@@ -121,7 +121,7 @@ export default function FormProduct() {
             />
           </div>
 
-          <button type="submit">Enviar promoción</button>
+          <button type="submit" className="w-full py-2 bg-violet-600 mt-5 text-white rounded-md hover:bg-violet-700 transition duration-200">Enviar promoción</button>
         </Form>
       </Formik>
     </div>

@@ -10,11 +10,7 @@ export default function FormLove() {
         .required('Requerido'),
       memory: Yup.string()
         .max(30, 'El mensaje no debe ser más de 30 caracteres'),
-      compliment: Yup.string()
-        .max(20, 'El mensaje no debe ser más de 20 caracteres'),
-      closing: Yup.string()
-        .max(20, 'El mensaje no debe ser más de 20 caracteres')
-        .required('Es requerido el mensaje')
+      
     });
   };
 
@@ -28,14 +24,13 @@ export default function FormLove() {
       memory: values.memory,
       lenght: values.lenght,
       type: values.type,
-      compliment: values.compliment,
-      closing: values.closing,
+      
     };
     console.log(postData);
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center">
       <Formik
         initialValues={{
           name: "",
@@ -45,14 +40,13 @@ export default function FormLove() {
           memory: "",
           lenght:"corto",
           type:"romantico",
-          compliment: "",
-          closing: "",
+          
           
         }}
         validationSchema={getValidationSchema()}
         onSubmit={handleSubmit}
       >
-        <Form className="bg-sky-500 shadow-md rounded-lg p-6 w-96 space-y-4">
+        <Form className="form-fields-container bg-sky-500 rounded-lg p-4">
           <h2 className="text-xl font-semibold text-center text-violet-600">Generador de Mensajes de Amor</h2>
           
           <div>
@@ -116,19 +110,9 @@ export default function FormLove() {
             </Field>
           </div>
 
-          <div>
-            <label htmlFor="compliment" className="block text-gray-700">Elogio especial</label>
-            <Field type="text" name="compliment" id="compliment" className="mt-1 block w-full border border-gray-300 rounded-md p-2"/>
-            <ErrorMessage name="compliment" component="div" className="text-red-500 text-sm"/>
-          </div>
+         
 
-          <div>
-            <label htmlFor="closing" className="block text-gray-700">Cierre del mensaje</label>
-            <Field type="text" id="closing" name="closing" className="mt-1 block w-full border border-gray-300 rounded-md p-2"/>
-            <ErrorMessage name="closing" component="div" className="text-red-500 text-sm"/>
-          </div>
-
-          <button type="submit" className="w-full py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition duration-200">Generar mensaje de amor</button>
+          <button type="submit" className="w-full py-2 mt-5 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition duration-200">Generar mensaje de amor</button>
         </Form>
       </Formik>
     </div>

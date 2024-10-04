@@ -1,7 +1,12 @@
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import { useState } from "react";
 
 export default function FormLove() {
+
+  const [editorContent, setEditorContent] = useState(""); // Guarda el contenido del editor
+
   
   const getValidationSchema = () => {
     return Yup.object({
@@ -14,7 +19,7 @@ export default function FormLove() {
     });
   };
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     // Crear un objeto JSON con los valores del formulario
     const postData = {
       name: values.name,
@@ -26,7 +31,27 @@ export default function FormLove() {
       type: values.type,
       
     };
-    console.log(postData);
+    const prompt = `Crear un post para: ${postData.name},tipo de relacion ${postData.relationship},sentimiento principal ${postData.feeling}, motivo del mensaje ${postData.occasion}, recuerdo especial ${postData.memory},tamaño del post ${postData.lenght}, tipo de post ${postData.type}`;
+    
+    console.log("Prompt generado", prompt);
+
+    try {
+      
+      // Hacer la solicitud a la API de Gemini
+      const response = await axios.post("/api/generate", { prompt });
+      
+      // Limpiar el contenido recibido (opcional)
+      const cleanedContent = response.data.answer
+        .replace(/[*#]/g, "") // Eliminar caracteres no deseados
+        .trim();
+      
+      // Actualizar el contenido del editor o mostrarlo en la consola
+      setEditorContent(cleanedContent);
+      console.log("Respuesta de la API de Gemini:", cleanedContent); // Mostrar en la consola
+    } catch (error) {
+      console.error("Error generando contenido:", error);
+      setEditorContent("Error generando contenido.");
+    }
   };
 
   return (

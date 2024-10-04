@@ -9,11 +9,12 @@ export default function Sidebar({ onPromocionClick }) {
       <div className="flex flex-col gap-4">
         <div className={`${!open ? "w-full" : "w-[200px]"} flex flex-col gap-4 xl:w-[200px]`}>
           <div className="bg-violet-700 rounded-lg p-2 w-[200px] justify-center text-white flex gap-2">
-            <p className="">Generar Post</p>
+            
             <button
               onClick={() => setOpen(true)}
               className={`${!open ? "flex" : "hidden"}`}
             >
+              <p className="">Generar Post</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -33,6 +34,7 @@ export default function Sidebar({ onPromocionClick }) {
               onClick={() => setOpen(false)}
               className={`${!open ? "hidden" : "flex"}`}
             >
+              <p className="">Generar Post</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

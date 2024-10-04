@@ -1,8 +1,13 @@
 import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import { useState } from "react";
 
 export default function FormProduct() {
+
+  const[editorContent, setEditorContent]= useState("");
+
   const getValidationSchema = () => {
     return Yup.object({
       productName: Yup.string()
@@ -25,7 +30,7 @@ export default function FormProduct() {
         .required("La fecha de fin es requerida"),
     });
   };
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     // Crear un objeto JSON con los valores del formulario
     const postData = {
       productName: values.productName,
@@ -35,7 +40,27 @@ export default function FormProduct() {
       startDate:values.startDate,
       endDate:values.endDate,
     };
-    console.log(postData)
+    const prompt = `Generar un post para: ${postData.productName}, descripcion del producto ${postData.price}, categoria ${postData.category}, fecha de inicio ${postData.startDate}, fecha de fin ${postData.endDate}`
+    console.log("Pormpot generado", prompt);
+
+    try {
+      
+      // Hacer la solicitud a la API de Gemini
+      const response = await axios.post("/api/generate", { prompt });
+      
+      // Limpiar el contenido recibido (opcional)
+      const cleanedContent = response.data.answer
+        .replace(/[*#]/g, "") // Eliminar caracteres no deseados
+        .trim();
+      
+      // Actualizar el contenido del editor o mostrarlo en la consola
+      setEditorContent(cleanedContent);
+      console.log("Respuesta de la API de Gemini:", cleanedContent); // Mostrar en la consola
+    } catch (error) {
+      console.error("Error generando contenido:", error);
+      setEditorContent("Error generando contenido.");
+    }
+    
     
   };
 

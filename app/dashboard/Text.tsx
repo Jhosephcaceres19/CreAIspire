@@ -25,7 +25,7 @@ export default function Text() {
     setQuestion("");
     setShowQuestion(true);
 
-    const prompt = `Busca un post sobre ${question}`; // Modificar según tus necesidades
+    const prompt = `Dame un post unico con emoticon sobre ${question}`; // Modificar según tus necesidades
 
     try {
       const response = await axios.post("/api/generate", { prompt });
@@ -63,12 +63,11 @@ export default function Text() {
     }
   };
 
-  // Función para generar otro mensaje basado en el contenido actual del editor
   const handleAnotherMessage = async () => {
     if (!editorContent) return; // Asegurarse de que haya contenido en el editor
 
     setLoading(true);
-    const prompt = `Mejora el siguiente contenido para un post llamativo: ${editorContent}`; // Usar el contenido del editor como base
+    const prompt = `Dame otro post llamativo: ${editorContent}`; // Usar el contenido del editor como base
 
     try {
       const response = await axios.post("/api/generate", { prompt });
@@ -84,6 +83,28 @@ export default function Text() {
       setLoading(false);
     }
   };
+
+  const handleImproveMessage = async () => {
+    if (!editorContent) return; // Asegurarse de que haya contenido en el editor
+
+    setLoading(true);
+    const prompt = `Mejora el mensaje con esos datos importante y dale emoticones: ${editorContent}`; // Usar el contenido del editor como base
+
+    try {
+      const response = await axios.post("/api/generate", { prompt });
+      // Limpiar el contenido recibido
+      const cleanedContent = response.data.answer
+        .replace(/[*#]/g, '') // Eliminar caracteres no deseados
+        .trim();
+      setEditorContent(cleanedContent);
+    } catch (error) {
+      console.error("Error generating another message:", error);
+      setEditorContent("Error generating content."); // Mostrar error en el editor
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const handleHashtack = async () => {
     if (!editorContent) return; // Asegurarse de que haya contenido en el editor
@@ -150,6 +171,15 @@ export default function Text() {
             </span>
           )}
 
+          {/* Botón para meojorar el mensaje */}
+          <button
+            onClick={handleImproveMessage}
+            className="p-1 shadow-lg rounded-md text-center border-2 hover:bg-violet-400 hover:text-white"
+            disabled={loading} // Deshabilitar si se está cargando
+          >
+            {loading ? "Cargando..." : "Mejorar mensaje"}
+          </button>
+
           {/* Botón para generar otro mensaje */}
           <button
             onClick={handleAnotherMessage}
@@ -158,6 +188,8 @@ export default function Text() {
           >
             {loading ? "Cargando..." : "Otro Mensaje"}
           </button>
+
+
 
           <button
           onClick={handleHashtack}

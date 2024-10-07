@@ -21,8 +21,8 @@ export default function Home() {
             En un mundo digital donde cada segundo cuenta, el contenido que
             compartes no puede pasar desapercibido. Nosotros transformamos tus
             ideas en estrategias creativas y visuales que capturan la atención y
-            generan conexiones reales con tu audiencia. Desde diseños
-            impactantes hasta mensajes que inspiran, te ayudamos a destacar en
+            generan conexiones reales con tu audiencia. Desde mensajes
+            impactantes que inspiran, te ayudamos a destacar en
             las redes sociales y hacer que lo que ofreces sea inolvidable. ¡Tu
             historia merece ser contada de manera única y poderosa!
           </div>

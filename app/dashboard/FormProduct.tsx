@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useState } from "react";
+import  MessageContext  from "./context/MessageContext";
+import { ProductFormValues } from "./interface/FormInterface";
 
 export default function FormProduct() {
 
   const[editorContent, setEditorContent]= useState("");
+  const context =  useContext(MessageContext);
 
   const getValidationSchema = () => {
     return Yup.object({
@@ -30,8 +33,7 @@ export default function FormProduct() {
         .required("La fecha de fin es requerida"),
     });
   };
-  const handleSubmit = async (values) => {
-    // Crear un objeto JSON con los valores del formulario
+  const handleSubmit = async (values:ProductFormValues, {resetForm}:{resetForm: ()=>void}) => {
     const postData = {
       productName: values.productName,
       description: values.description,
@@ -43,19 +45,24 @@ export default function FormProduct() {
     const prompt = `Generar un post para: ${postData.productName}, descripcion del producto ${postData.price}, categoria ${postData.category}, fecha de inicio ${postData.startDate}, fecha de fin ${postData.endDate}`
     console.log("Pormpot generado", prompt);
 
+    // Verifica que el contexto esté definido
+    if (!context) {
+      throw new Error("MessageContext must be used within a MessageProvider");
+    }
+
+    const { setMessage } = context; // Extrae setMessage del contexto
     try {
       
-      // Hacer la solicitud a la API de Gemini
       const response = await axios.post("/api/generate", { prompt });
       
-      // Limpiar el contenido recibido (opcional)
       const cleanedContent = response.data.answer
-        .replace(/[*#]/g, "") // Eliminar caracteres no deseados
+        .replace(/[*#]/g, "") 
         .trim();
-      
-      // Actualizar el contenido del editor o mostrarlo en la consola
       setEditorContent(cleanedContent);
-      console.log("Respuesta de la API de Gemini:", cleanedContent); // Mostrar en la consola
+      console.log(editorContent)
+      console.log("Respuesta de la API de Gemini:", cleanedContent); 
+      setMessage(cleanedContent)
+      resetForm();
     } catch (error) {
       console.error("Error generando contenido:", error);
       setEditorContent("Error generando contenido.");
@@ -71,7 +78,7 @@ export default function FormProduct() {
           productName: "",
           description: "",
           price: "",
-          category: "electronica", // valor predeterminado para los selects
+          category: "electronica", 
           startDate: "",
           endDate: "",
         }}

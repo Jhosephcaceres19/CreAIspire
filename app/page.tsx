@@ -7,7 +7,7 @@ export default function Home() {
       <Navbar />
       <main className="flex flex-col lg:flex-row-reverse place-items-center px-8 h-full gap-4 pt-20 md:pt-40 lg:pt-50 lg:pr-0">
         <Image
-          src="/agencia.png"
+          src="/image.png"
           width={400}
           height={400}
           alt="Logo"

@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useState } from "react";
+import  MessageContext  from "./context/MessageContext";
+import { InspirationFormValues } from "./interface/FormInterface";
 
 export default function FormPostInspiration() {
 
   const[editorContent, setEditorContent]= useState("");
+  const context = useContext(MessageContext)
+
   const getValidationSchema = () => {
     return Yup.object({
       title: Yup.string()
@@ -25,8 +29,7 @@ export default function FormPostInspiration() {
     });
   };
 
-  const handleSubmit = async (values) => {
-    // Crear un objeto JSON con los valores del formulario
+  const handleSubmit = async (values:InspirationFormValues, {resetForm}:{resetForm: ()=>void}) => {
     const postData = {
       title: values.title,
       category: values.category,
@@ -38,19 +41,25 @@ export default function FormPostInspiration() {
 
     console.log("Prompt generado:", prompt);
 
+    // Verifica que el contexto esté definido
+    if (!context) {
+      throw new Error("MessageContext must be used within a MessageProvider");
+    }
+
+    const { setMessage } = context; // Extrae setMessage del contexto
     try {
       
-      // Hacer la solicitud a la API de Gemini
       const response = await axios.post("/api/generate", { prompt });
       
-      // Limpiar el contenido recibido (opcional)
       const cleanedContent = response.data.answer
-        .replace(/[*]/g, "") // Eliminar caracteres no deseados
+        .replace(/[*]/g, "") 
         .trim();
       
-      // Actualizar el contenido del editor o mostrarlo en la consola
       setEditorContent(cleanedContent);
-      console.log("Respuesta de la API de Gemini:", cleanedContent); // Mostrar en la consola
+      console.log(editorContent)
+      console.log("Respuesta de la API de Gemini:", cleanedContent); 
+      setMessage(cleanedContent)
+      resetForm();
     } catch (error) {
       console.error("Error generando contenido:", error);
       setEditorContent("Error generando contenido.");
@@ -63,7 +72,7 @@ export default function FormPostInspiration() {
       <Formik
         initialValues={{
           title: "",
-          category: "motivacional", // valor predeterminado
+          category: "motivacional", 
           message: "",
           hashtags: "",
         }}

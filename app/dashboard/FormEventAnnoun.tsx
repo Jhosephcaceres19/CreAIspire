@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import MessageContext from "./context/MessageContext";
+import { EventFormValues } from "./interface/FormInterface";
 
 export default function FormEventAnnoun() {
-  const [editorContent, setEditorContent] = useState(""); // Guarda el contenido del editor
+  const [editorContent, setEditorContent] = useState("");
+  const context = useContext(MessageContext);
 
   const getValidationSchema = () => {
     return Yup.object({
       eventName: Yup.string()
         .max(100, "El nombre del evento no debe tener más de 100 caracteres")
         .required("El nombre del evento es requerido"),
-      eventDate: Yup.date()
-        .required("La fecha del evento es requerida"),
+      eventDate: Yup.date().required("La fecha del evento es requerida"),
       location: Yup.string().required("La ubicación es requerida"),
       eventType: Yup.string().required("Selecciona el tipo de evento"),
       description: Yup.string()
@@ -21,8 +23,10 @@ export default function FormEventAnnoun() {
     });
   };
 
-  const handleSubmit = async (values) => {
-    // Crear el postData con los valores del formulario
+  const handleSubmit = async (
+    values: EventFormValues,
+    { resetForm }: { resetForm: () => void }
+  ) => {
     const postData = {
       eventName: values.eventName,
       eventDate: values.eventDate,
@@ -31,24 +35,28 @@ export default function FormEventAnnoun() {
       description: values.description,
     };
 
-    // Generar el prompt para la API de Gemini
     const prompt = `Crea un post para: ${postData.eventName}, que será en fecha ${postData.eventType} en el lugar ${postData.location} el tipo de evento es ${postData.eventDate}. la descripción del evento es: ${postData.description}`;
 
-    console.log("Prompt generado:", prompt); // Verificar que el prompt se genera correctamente
+    console.log("Prompt generado:", prompt);
 
+    // Verifica que el contexto esté definido
+    if (!context) {
+      throw new Error("MessageContext must be used within a MessageProvider");
+    }
+
+    const { setMessage } = context; // Extrae setMessage del contexto
+
+    // El resto de tu componente...
     try {
-      
-      // Hacer la solicitud a la API de Gemini
       const response = await axios.post("/api/generate", { prompt });
-      
-      // Limpiar el contenido recibido (opcional)
-      const cleanedContent = response.data.answer
-        .replace(/[*#]/g, "") // Eliminar caracteres no deseados
-        .trim();
-      
-      // Actualizar el contenido del editor o mostrarlo en la consola
+
+      const cleanedContent = response.data.answer.replace(/[*#]/g, "").trim();
+
       setEditorContent(cleanedContent);
-      console.log("Respuesta de la API de Gemini:", cleanedContent); // Mostrar en la consola
+      console.log(editorContent);
+      console.log("Respuesta de la API de Gemini:", cleanedContent);
+      setMessage(cleanedContent);
+      resetForm();
     } catch (error) {
       console.error("Error generando contenido:", error);
       setEditorContent("Error generando contenido.");
@@ -171,8 +179,6 @@ export default function FormEventAnnoun() {
           >
             Publicar Anuncio del Evento
           </button>
-
-          
         </Form>
       </Formik>
     </div>

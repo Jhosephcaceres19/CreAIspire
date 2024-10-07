@@ -1,11 +1,14 @@
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import  MessageContext  from "./context/MessageContext";
+import { LoveFormValues } from "./interface/FormInterface";
 
 export default function FormLove() {
 
-  const [editorContent, setEditorContent] = useState(""); // Guarda el contenido del editor
+  const [editorContent, setEditorContent] = useState(""); 
+  const context = useContext(MessageContext);
 
   
   const getValidationSchema = () => {
@@ -19,8 +22,7 @@ export default function FormLove() {
     });
   };
 
-  const handleSubmit = async (values) => {
-    // Crear un objeto JSON con los valores del formulario
+  const handleSubmit = async (values:LoveFormValues, {resetForm}:{resetForm: ()=>void}) => {
     const postData = {
       name: values.name,
       relationship: values.relationship,
@@ -35,19 +37,25 @@ export default function FormLove() {
     
     console.log("Prompt generado", prompt);
 
+    // Verifica que el contexto esté definido
+    if (!context) {
+      throw new Error("MessageContext must be used within a MessageProvider");
+    }
+
+    const { setMessage } = context; // Extrae setMessage del contexto
     try {
       
-      // Hacer la solicitud a la API de Gemini
       const response = await axios.post("/api/generate", { prompt });
       
-      // Limpiar el contenido recibido (opcional)
       const cleanedContent = response.data.answer
-        .replace(/[*#]/g, "") // Eliminar caracteres no deseados
+        .replace(/[*#]/g, "") 
         .trim();
       
-      // Actualizar el contenido del editor o mostrarlo en la consola
       setEditorContent(cleanedContent);
-      console.log("Respuesta de la API de Gemini:", cleanedContent); // Mostrar en la consola
+      console.log(editorContent)
+      console.log("Respuesta de la API de Gemini:", cleanedContent);
+      setMessage(cleanedContent)
+      resetForm();
     } catch (error) {
       console.error("Error generando contenido:", error);
       setEditorContent("Error generando contenido.");
@@ -61,7 +69,7 @@ export default function FormLove() {
           name: "",
           relationship:"pareja",
           feeling:"amor romantico",
-          accasion:"aniversario",
+          occasion:"aniversario",
           memory: "",
           lenght:"corto",
           type:"romantico",

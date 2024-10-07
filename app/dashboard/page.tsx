@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import Navbar from "../Navbar";
 import Sidebar from "./Sidebar";
 import Text from "./Text";
@@ -7,6 +7,8 @@ import FormProduct from "./FormProduct";
 import FormLove from "./FormLove";
 import FormEventAnnoun from "./FormEventAnnoun";
 import FormPostInspiration from "./FormPostInspiration.tsx";
+import { MessageProvider } from "./context/MessageContext";
+
 
 export default function Dashboard() {
   const [activeForm, setActiveForm] = useState<string | null>(null);
@@ -20,7 +22,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-black via-violet-800 to-violet-600 min-h-screen w-full">
+    <MessageProvider>
+      
+      <div className="bg-gradient-to-b from-black via-violet-800 to-violet-600 min-h-screen w-full">
       <Navbar />
       <div className="flex justify-center w-full">
         {/* Mostrando el formulario seleccionado */}
@@ -54,5 +58,6 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+    </MessageProvider>
   );
 }

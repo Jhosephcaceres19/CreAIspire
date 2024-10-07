@@ -5,7 +5,13 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 export async function POST(request: Request) {
   const { prompt } = await request.json();
   
-  const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_API_KEY);
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+  
+  if (!apiKey) {
+    return NextResponse.json({ error: 'API key is missing' }, { status: 500 });
+  }
+
+  const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   try {

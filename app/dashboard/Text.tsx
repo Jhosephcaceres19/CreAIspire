@@ -1,18 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
+import  MessageContext  from "./context/MessageContext";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function Text() {
-  const [editorContent, setEditorContent] = useState(""); // Guarda el contenido del editor
+  const [editorContent, setEditorContent] = useState(""); 
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
-  const [copiado, setCopiado] = useState(false); // Estado para mostrar si se copió correctamente
+  const [copiado, setCopiado] = useState(false);
+
+  // Asegúrate de que el contexto no sea undefined antes de desestructurarlo
+  const context = useContext(MessageContext);
+  if (!context) {
+    throw new Error("MessageContext must be used within a MessageProvider");
+  }
+
+  const { message } = context; // Desestructura el mensaje y la función setMessage
+  // Efecto para actualizar el contenido del editor cuando cambia el mensaje del contexto
+  useEffect(() => {
+    if (message) {
+      setEditorContent(message); // Actualizar el contenido del editor con el mensaje del contexto
+    }
+  }, [message]); // Solo se ejecuta cuando 'message' cambia
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuestion(e.target.value);
@@ -25,36 +40,29 @@ export default function Text() {
     setQuestion("");
     setShowQuestion(true);
 
-    const prompt = `Dame un post unico con emoticon sobre ${question}`; // Modificar según tus necesidades
+    const prompt = `Dame un post unico con emoticon sobre ${question}`;
 
     try {
       const response = await axios.post("/api/generate", { prompt });
-      // Limpiar el contenido recibido
       const cleanedContent = response.data.answer
-        .replace(/[*#]/g, '') // Eliminar caracteres no deseados
+        .replace(/[*#]/g, '') 
         .trim();
       setEditorContent(cleanedContent);
     } catch (error) {
       console.error("Error generating content:", error);
-      setEditorContent("Error generating content."); // Mostrar error en el editor
+      setEditorContent("Error generating content."); 
     } finally {
       setLoading(false);
     }
   };
 
-  // Función para copiar el contenido del editor de ReactQuill
   const copiarAlPortapapeles = async () => {
-    // Crear un elemento temporal para extraer el texto sin etiquetas HTML
     const tempElement = document.createElement("div");
-    tempElement.innerHTML = editorContent; // Poner el contenido HTML en el elemento temporal
-
-    // Extraer el texto sin etiquetas HTML
+    tempElement.innerHTML = editorContent;
     const textoSinEtiquetas = tempElement.innerText;
     try {
-      await navigator.clipboard.writeText(textoSinEtiquetas); // Copia el contenido del editor
+      await navigator.clipboard.writeText(textoSinEtiquetas);
       setCopiado(true);
-
-      // Mostrar un estado de copiado por unos segundos
       setTimeout(() => {
         setCopiado(false);
       }, 2000);
@@ -64,64 +72,60 @@ export default function Text() {
   };
 
   const handleAnotherMessage = async () => {
-    if (!editorContent) return; // Asegurarse de que haya contenido en el editor
+    if (!editorContent) return;
 
     setLoading(true);
-    const prompt = `Dame otro post llamativo: ${editorContent}`; // Usar el contenido del editor como base
+    const prompt = `Dame otro post llamativo: ${editorContent}`;
 
     try {
       const response = await axios.post("/api/generate", { prompt });
-      // Limpiar el contenido recibido
       const cleanedContent = response.data.answer
-        .replace(/[*#]/g, '') // Eliminar caracteres no deseados
+        .replace(/[*#]/g, '')
         .trim();
       setEditorContent(cleanedContent);
     } catch (error) {
       console.error("Error generating another message:", error);
-      setEditorContent("Error generating content."); // Mostrar error en el editor
+      setEditorContent("Error generating content.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleImproveMessage = async () => {
-    if (!editorContent) return; // Asegurarse de que haya contenido en el editor
+    if (!editorContent) return;
 
     setLoading(true);
-    const prompt = `Mejora el mensaje con esos datos importante y dale emoticones: ${editorContent}`; // Usar el contenido del editor como base
+    const prompt = `Mejora el mensaje con esos datos importante y dale emoticones: ${editorContent}`;
 
     try {
       const response = await axios.post("/api/generate", { prompt });
-      // Limpiar el contenido recibido
       const cleanedContent = response.data.answer
-        .replace(/[*#]/g, '') // Eliminar caracteres no deseados
+        .replace(/[*#]/g, '')
         .trim();
       setEditorContent(cleanedContent);
     } catch (error) {
       console.error("Error generating another message:", error);
-      setEditorContent("Error generating content."); // Mostrar error en el editor
+      setEditorContent("Error generating content.");
     } finally {
       setLoading(false);
     }
   };
 
-
   const handleHashtack = async () => {
-    if (!editorContent) return; // Asegurarse de que haya contenido en el editor
+    if (!editorContent) return;
 
     setLoading(true);
-    const prompt = `Agregar hashtack en base al mensaje que tienes y mostrar debajo del mensaje : ${editorContent}`; // Usar el contenido del editor como base
+    const prompt = `Agregar hashtack en base al mensaje que tienes y mostrar debajo del mensaje : ${editorContent}`;
 
     try {
       const response = await axios.post("/api/generate", { prompt });
-      // Limpiar el contenido recibido
       const cleanedContent = response.data.answer
-        .replace(/[*]/g, '') // Eliminar caracteres no deseados
+        .replace(/[*]/g, '')
         .trim();
       setEditorContent(cleanedContent);
     } catch (error) {
       console.error("Error generating another message:", error);
-      setEditorContent("Error generating content."); // Mostrar error en el editor
+      setEditorContent("Error generating content.");
     } finally {
       setLoading(false);
     }
@@ -157,47 +161,41 @@ export default function Text() {
         />
 
         <div className="flex justify-around mt-2">
-          {/* Botón para copiar el contenido del editor */}
           <button
             onClick={copiarAlPortapapeles}
             className="p-1 shadow-lg rounded-md text-center border-2 hover:bg-violet-400 hover:text-white"
           >
             📋 Copiar
           </button>
-          {/* Mostrar mensaje de copiado */}
           {copiado && (
             <span style={{ color: "green", marginLeft: "0px" }}>
               ¡Texto copiado!
             </span>
           )}
 
-          {/* Botón para meojorar el mensaje */}
           <button
             onClick={handleImproveMessage}
             className="p-1 shadow-lg rounded-md text-center border-2 hover:bg-violet-400 hover:text-white"
-            disabled={loading} // Deshabilitar si se está cargando
+            disabled={loading}
           >
             {loading ? "Cargando..." : "Mejorar mensaje"}
           </button>
 
-          {/* Botón para generar otro mensaje */}
           <button
             onClick={handleAnotherMessage}
             className="p-1 shadow-lg rounded-md text-center border-2 hover:bg-violet-400 hover:text-white"
-            disabled={loading} // Deshabilitar si se está cargando
+            disabled={loading}
           >
             {loading ? "Cargando..." : "Otro Mensaje"}
           </button>
 
-
-
           <button
-          onClick={handleHashtack}
-          className="p-1 shadow-lg rounded-e-md text-center border-2 hover:bg-violet-400 hover:text-white" 
-          disabled={loading}
-          >{loading ? "Cargando...":"Generar hashtack"}</button>
-
-          
+            onClick={handleHashtack}
+            className="p-1 shadow-lg rounded-e-md text-center border-2 hover:bg-violet-400 hover:text-white"
+            disabled={loading}
+          >
+            {loading ? "Cargando..." : "Generar hashtack"}
+          </button>
         </div>
       </div>
     </div>

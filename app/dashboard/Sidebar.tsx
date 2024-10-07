@@ -1,7 +1,10 @@
 "use client";
 import React, { useState } from "react";
 
-export default function Sidebar({ onPromocionClick }) {
+interface Sidebar {
+  onPromocionClick: (type: string) => void; // Define the type of the function
+}
+export default function Sidebar( {onPromocionClick}:Sidebar) {
   const [open, setOpen] = useState(false);
 
   return (
